@@ -1,0 +1,94 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION, SOCIALS, PROFILE } from '../consts';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE_DESCRIPTION } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+const currentPath = Astro.url.pathname;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#050F1F" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(currentPath, Astro.site)} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE_TITLE}
+      href={new URL('rss.xml', Astro.site)}
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav>
+        <a class="brand" href="/">{PROFILE.name}<span class="dot">.</span></a>
+        <div class="nav-links">
+          <a href="/" aria-current={currentPath === '/' ? 'page' : undefined}>Home</a>
+          <a
+            href="/blog/"
+            aria-current={currentPath.startsWith('/blog') ? 'page' : undefined}
+            >Blog</a
+          >
+        </div>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="inner">
+        <span>© {year} {PROFILE.name}</span>
+        <span>
+          {
+            SOCIALS.map((s, i) => (
+              <>
+                <a href={s.href}>{s.label}</a>
+                {i < SOCIALS.length - 1 && ' · '}
+              </>
+            ))
+          }
+          {' · '}
+          <a href="/rss.xml">RSS</a>
+        </span>
+      </div>
+    </footer>
+    <script>
+      // Scroll-reveal: fade + rise as sections enter the viewport.
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const targets = document.querySelectorAll('.reveal');
+      if (reduced || !('IntersectionObserver' in window)) {
+        targets.forEach((el) => el.classList.add('in'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.15 }
+        );
+        targets.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

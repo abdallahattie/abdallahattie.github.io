@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Blog" description="Articles and thoughts by Abdallah Attie.">
+  <div class="container narrow">
+    <section class="block">
+      <p class="eyebrow">Field notes</p>
+      <h1>Blog</h1>
+      <p class="lede">
+        Articles and thoughts on machine intelligence, building products, and
+        the work between research and production.
+      </p>
+      <ul class="post-list">
+        {
+          posts.map((post) => (
+            <li>
+              <a class="post-title" href={`/blog/${post.id}/`}>
+                {post.data.title}
+              </a>
+              <p class="post-meta">
+                <FormattedDate date={post.data.pubDate} />
+              </p>
+              <p class="post-desc">{post.data.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
