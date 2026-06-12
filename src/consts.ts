@@ -43,7 +43,7 @@ export const PROFILE = {
 };
 
 export const SOCIALS = [
-  { label: 'Email', href: 'mailto:Abdallah@metaseed.ai', handle: 'Abdallah@metaseed.ai' },
+  { label: 'Email', href: 'mailto:abdallah@metaseed.ai', handle: 'abdallah@metaseed.ai' },
   { label: 'GitHub', href: 'https://github.com/abdallahattie', handle: '@abdallahattie' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/aattie1', handle: 'in/aattie1' },
 ];
