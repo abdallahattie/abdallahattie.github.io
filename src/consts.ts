@@ -6,6 +6,9 @@ export const SITE_DESCRIPTION =
 
 export const PROFILE = {
   name: 'Abdallah Attie',
+  // Transparent-background cutout served from public/profile.png;
+  // the placeholder shows until that file exists.
+  photo: '/profile.png',
   eyebrow: 'Founder · Applied AI · Beirut | Riyadh | Muscat | Doha',
   headlineStatic: 'Building systems that',
   headlineWords: ['learn', 'reason', 'ship', 'compound'],

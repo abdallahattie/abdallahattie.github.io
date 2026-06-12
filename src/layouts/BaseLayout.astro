@@ -23,7 +23,8 @@ const year = new Date().getFullYear();
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#050F1F" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6fafd" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#081522" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={new URL(currentPath, Astro.site)} />
     <link
@@ -34,6 +35,14 @@ const year = new Date().getFullYear();
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <title>{pageTitle}</title>
+    <script is:inline>
+      // Apply a saved theme override before first paint to avoid a flash.
+      // No saved value = follow the system setting (the CSS default).
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.dataset.theme = saved;
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -46,6 +55,15 @@ const year = new Date().getFullYear();
             aria-current={currentPath.startsWith('/blog') ? 'page' : undefined}
             >Blog</a
           >
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
         </div>
       </nav>
     </header>
@@ -70,6 +88,18 @@ const year = new Date().getFullYear();
       </div>
     </footer>
     <script>
+      // Theme toggle — flips between light and dark and remembers the choice.
+      // Without a stored choice the site follows the system setting.
+      const toggle = document.getElementById('theme-toggle');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+      toggle?.addEventListener('click', () => {
+        const current =
+          document.documentElement.dataset.theme ?? (systemDark.matches ? 'dark' : 'light');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('theme', next);
+      });
+
       // Scroll-reveal: fade + rise as sections enter the viewport.
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const targets = document.querySelectorAll('.reveal');

@@ -11,27 +11,61 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 
 <BaseLayout>
   <section class="hero">
-    <canvas id="constellation" aria-hidden="true"></canvas>
-    <div class="glow green" aria-hidden="true"></div>
-    <div class="glow blue" aria-hidden="true"></div>
+    <div class="orb ocean" data-parallax="0.18" aria-hidden="true"></div>
+    <div class="orb coral" data-parallax="0.28" aria-hidden="true"></div>
+    <div class="orb aqua" data-parallax="0.12" aria-hidden="true"></div>
+    <div class="orb indigo" data-parallax="0.22" aria-hidden="true"></div>
+    <div class="blob b1" data-parallax="0.1" aria-hidden="true"></div>
+    <div class="blob b2" data-parallax="0.16" aria-hidden="true"></div>
     <div class="inner">
-      <p class="eyebrow">{PROFILE.eyebrow}</p>
-      <h1>{PROFILE.name}</h1>
-      <p class="headline">
-        {PROFILE.headlineStatic}
-        <span class="rotator" id="rotator">{PROFILE.headlineWords[0]}</span>.
-      </p>
-      <p class="tagline">{PROFILE.tagline}</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="/blog/">Read the blog</a>
-        <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      <div>
+        <p class="eyebrow rise d1">{PROFILE.eyebrow}</p>
+        <h1 class="rise d2">{PROFILE.name}</h1>
+        <p class="headline rise d3">
+          {PROFILE.headlineStatic}
+          <span class="rotator" id="rotator">{PROFILE.headlineWords[0]}</span>.
+        </p>
+        <p class="tagline rise d3">{PROFILE.tagline}</p>
+        <div class="cta-row rise d4">
+          <a class="btn btn-primary" href="/blog/">Read the blog</a>
+          <a class="btn btn-ghost" href="#contact">Get in touch</a>
+        </div>
+        <div class="terminal rise d5" aria-hidden="true">
+          <span class="prompt">$</span> {PROFILE.terminal.command}<br />
+          <span class="out">{PROFILE.terminal.output}</span> <span class="cursor"></span>
+        </div>
       </div>
-      <div class="terminal" aria-hidden="true">
-        <span class="prompt">$</span> {PROFILE.terminal.command}<br />
-        <span class="out">{PROFILE.terminal.output}</span> <span class="cursor"></span>
+      <div class="portrait-col rise d2">
+        <div class="portrait">
+          <img
+            src={PROFILE.photo}
+            alt={`Portrait of ${PROFILE.name}`}
+            width="320"
+            height="320"
+            onerror="this.onerror=null;this.src='/profile-placeholder.svg'"
+          />
+        </div>
       </div>
     </div>
   </section>
+
+  <svg
+    class="wave-divider"
+    viewBox="0 0 1440 90"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <path
+      fill="currentColor"
+      opacity="0.35"
+      d="M0,48 C240,90 480,6 720,30 C960,54 1200,84 1440,42 L1440,90 L0,90 Z"
+    ></path>
+    <path
+      fill="currentColor"
+      opacity="0.6"
+      d="M0,66 C260,30 520,84 780,60 C1040,36 1260,66 1440,60 L1440,90 L0,90 Z"
+    ></path>
+  </svg>
 
   <div class="container">
     <section class="block reveal">
@@ -40,13 +74,15 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       {PROFILE.about.map((paragraph) => <p class="lede">{paragraph}</p>)}
     </section>
 
-    <section class="block reveal">
-      <p class="eyebrow">Operating principles</p>
-      <div class="section-title"><h2>How I think</h2></div>
+    <section class="block">
+      <div class="reveal">
+        <p class="eyebrow">Operating principles</p>
+        <div class="section-title"><h2>How I think</h2></div>
+      </div>
       <div class="cards">
         {
-          PROFILE.principles.map((p) => (
-            <div class="card">
+          PROFILE.principles.map((p, i) => (
+            <div class="card reveal" style={`--reveal-delay: ${i * 130}ms`}>
               <span class="num">{p.n}</span>
               <h3>{p.title}</h3>
               <p>{p.body}</p>
@@ -56,16 +92,18 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       </div>
     </section>
 
-    <section class="block reveal">
-      <p class="eyebrow">From the blog</p>
-      <div class="section-title">
-        <h2>Latest writing</h2>
-        <a class="more" href="/blog/">All posts →</a>
+    <section class="block">
+      <div class="reveal">
+        <p class="eyebrow">From the blog</p>
+        <div class="section-title">
+          <h2>Latest writing</h2>
+          <a class="more" href="/blog/">All posts →</a>
+        </div>
       </div>
       <ul class="post-list">
         {
-          posts.map((post) => (
-            <li>
+          posts.map((post, i) => (
+            <li class="reveal" style={`--reveal-delay: ${i * 130}ms`}>
               <a class="post-title" href={`/blog/${post.id}/`}>
                 {post.data.title}
               </a>
@@ -102,94 +140,64 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 </BaseLayout>
 
 <script>
-  // Rotating headline word — crossfade on the contemplative scale.
+  // Rotating headline word — gentle crossfade.
   import { PROFILE } from '../consts';
 
   const rotator = document.getElementById('rotator');
   const words = PROFILE.headlineWords;
-  if (rotator && words.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (rotator && words.length > 1 && !reduced) {
+    // Pin the width to the current word so it can transition per swap —
+    // the trailing period then travels with the word instead of sitting
+    // at the widest word's edge.
+    const fitWidth = () => {
+      rotator.style.width = 'auto';
+      const w = rotator.offsetWidth;
+      rotator.style.width = `${w}px`;
+    };
+    fitWidth();
+    document.fonts?.ready.then(fitWidth);
+
     let i = 0;
     setInterval(() => {
       rotator.classList.add('swap');
       setTimeout(() => {
         i = (i + 1) % words.length;
         rotator.textContent = words[i];
+        const prev = rotator.style.width;
+        rotator.style.width = 'auto';
+        const next = rotator.offsetWidth;
+        rotator.style.width = prev;
+        void rotator.offsetWidth;
+        rotator.style.width = `${next}px`;
         rotator.classList.remove('swap');
-      }, 380);
+      }, 340);
     }, 3400);
   }
 
-  // Particle constellation — slow-drifting nodes, linked when close.
-  const canvas = document.getElementById('constellation') as HTMLCanvasElement | null;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (canvas && !reduced) {
-    const ctx = canvas.getContext('2d')!;
-    const COLORS = ['rgba(64,153,240,', 'rgba(98,193,140,', 'rgba(0,212,255,'];
-    let w = 0;
-    let h = 0;
-    let dpr = 1;
-    type Node = { x: number; y: number; vx: number; vy: number; r: number; c: string };
-    let nodes: Node[] = [];
-
-    function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = canvas!.offsetWidth;
-      h = canvas!.offsetHeight;
-      canvas!.width = w * dpr;
-      canvas!.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.min(90, Math.floor((w * h) / 16000));
-      nodes = Array.from({ length: count }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: (Math.random() - 0.5) * 0.22,
-        r: 1 + Math.random() * 1.6,
-        c: COLORS[Math.floor(Math.random() * COLORS.length)],
-      }));
-    }
-
-    function step() {
-      ctx.clearRect(0, 0, w, h);
-      const LINK = 120;
-      for (const n of nodes) {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < -10) n.x = w + 10;
-        if (n.x > w + 10) n.x = -10;
-        if (n.y < -10) n.y = h + 10;
-        if (n.y > h + 10) n.y = -10;
+  // Parallax — orbs and blobs glide slower than the scroll.
+  const layers = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-parallax]')
+  );
+  if (layers.length && !reduced) {
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      for (const el of layers) {
+        const speed = Number(el.dataset.parallax) || 0.15;
+        el.style.translate = `0 ${y * speed}px`;
       }
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i];
-          const b = nodes[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < LINK * LINK) {
-            const alpha = 0.14 * (1 - Math.sqrt(d2) / LINK);
-            ctx.strokeStyle = `rgba(128,189,248,${alpha.toFixed(3)})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
         }
-      }
-      for (const n of nodes) {
-        ctx.fillStyle = `${n.c}0.55)`;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      requestAnimationFrame(step);
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-    document.fonts?.ready.then(() => resize());
-    requestAnimationFrame(step);
+      },
+      { passive: true }
+    );
   }
 </script>
