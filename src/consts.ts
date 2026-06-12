@@ -7,7 +7,7 @@ export const SITE_DESCRIPTION =
 export const PROFILE = {
   name: 'Abdallah Attie',
   eyebrow: 'Founder · Applied AI · Beirut | Riyadh | Muscat | Doha',
-  headlineStatic: 'Building machines that',
+  headlineStatic: 'Building systems that',
   headlineWords: ['learn', 'reason', 'ship', 'compound'],
   tagline:
     "I'm the managing partner in an AI company. This site is where I think out loud — on machine intelligence, building products people actually use, and what comes next.",
@@ -16,7 +16,7 @@ export const PROFILE = {
     output: 'founder. engineer. long on machines that learn.',
   },
   about: [
-    `I'm an engineer who started an AI company. The thesis is simple: the
+    `I'm an engineer who started an AI company with my partners. The thesis is simple: the
      distance between a model that demos well and a system that runs every
      day is where most of the value — and most of the work — lives.`,
     `This site is the personal side of that work. Notes on machine
