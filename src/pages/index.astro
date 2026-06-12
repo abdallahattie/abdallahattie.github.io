@@ -141,12 +141,29 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   const words = PROFILE.headlineWords;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (rotator && words.length > 1 && !reduced) {
+    // Pin the width to the current word so it can transition per swap —
+    // the trailing period then travels with the word instead of sitting
+    // at the widest word's edge.
+    const fitWidth = () => {
+      rotator.style.width = 'auto';
+      const w = rotator.offsetWidth;
+      rotator.style.width = `${w}px`;
+    };
+    fitWidth();
+    document.fonts?.ready.then(fitWidth);
+
     let i = 0;
     setInterval(() => {
       rotator.classList.add('swap');
       setTimeout(() => {
         i = (i + 1) % words.length;
         rotator.textContent = words[i];
+        const prev = rotator.style.width;
+        rotator.style.width = 'auto';
+        const next = rotator.offsetWidth;
+        rotator.style.width = prev;
+        void rotator.offsetWidth;
+        rotator.style.width = `${next}px`;
         rotator.classList.remove('swap');
       }, 340);
     }, 3400);

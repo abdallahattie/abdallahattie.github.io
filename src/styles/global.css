@@ -626,14 +626,16 @@ img {
 
 .hero .headline .rotator {
   display: inline-block;
-  min-width: 5.2ch;
+  white-space: nowrap;
+  /* Width is set per-word from JS so the trailing period travels with the word */
   background: var(--grad-hero);
   background-size: 220% 220%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   animation: grad-shift 9s var(--ease-in-out) infinite alternate;
-  transition: opacity var(--dur-med) var(--ease-out), transform var(--dur-med) var(--ease-out);
+  transition: opacity var(--dur-med) var(--ease-out), transform var(--dur-med) var(--ease-out),
+    width var(--dur-med) var(--ease-out);
 }
 
 .hero .headline .rotator.swap {
