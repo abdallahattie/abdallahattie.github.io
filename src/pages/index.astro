@@ -37,7 +37,13 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       </div>
       <div class="portrait-col rise d2">
         <div class="portrait">
-          <img src={PROFILE.photo} alt={`Portrait of ${PROFILE.name}`} width="240" height="240" />
+          <img
+            src={PROFILE.photo}
+            alt={`Portrait of ${PROFILE.name}`}
+            width="320"
+            height="320"
+            onerror="this.onerror=null;this.src='/profile-placeholder.svg'"
+          />
         </div>
       </div>
     </div>
