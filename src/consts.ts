@@ -44,6 +44,6 @@ export const PROFILE = {
 
 export const SOCIALS = [
   { label: 'Email', href: 'mailto:abdallah.attie@gmail.com', handle: 'abdallah.attie@gmail.com' },
-  { label: 'GitHub', href: 'https://github.com/abdallahattie', handle: '@abdallahattie' },
+  { label: 'GitHub', href: 'https://github.com/Attico', handle: '@Attico' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/abdallahattie', handle: 'in/abdallahattie' },
 ];
