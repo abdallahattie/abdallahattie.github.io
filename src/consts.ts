@@ -6,11 +6,11 @@ export const SITE_DESCRIPTION =
 
 export const PROFILE = {
   name: 'Abdallah Attie',
-  eyebrow: 'Founder · Applied AI · Montréal',
+  eyebrow: 'Founder · Applied AI · Beirut | Riyadh | Muscat | Doha',
   headlineStatic: 'Building machines that',
   headlineWords: ['learn', 'reason', 'ship', 'compound'],
   tagline:
-    'I run an AI company. This site is where I think out loud — on machine intelligence, building products people actually use, and what comes next.',
+    "I'm the managing partner in an AI company. This site is where I think out loud — on machine intelligence, building products people actually use, and what comes next.",
   terminal: {
     command: 'whoami',
     output: 'founder. engineer. long on machines that learn.',
@@ -43,7 +43,7 @@ export const PROFILE = {
 };
 
 export const SOCIALS = [
-  { label: 'Email', href: 'mailto:abdallah.attie@gmail.com', handle: 'abdallah.attie@gmail.com' },
+  { label: 'Email', href: 'mailto:Abdallah@metaseed.ai', handle: 'Abdallah@metaseed.ai' },
   { label: 'GitHub', href: 'https://github.com/abdallahattie', handle: '@abdallahattie' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/abdallahattie', handle: 'in/abdallahattie' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/aattie1', handle: 'in/aattie1' },
 ];

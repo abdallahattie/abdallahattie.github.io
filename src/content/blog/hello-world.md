@@ -41,4 +41,4 @@ Welcome — this is the first post on my new site.
 ```
 
 If you want to follow along, there's an [RSS feed](/rss.xml). Or just
-[email me](mailto:abdallah.attie@gmail.com) — I'm always happy to talk shop.
+[email me](mailto:Abdallah@metaseed.ai) — I'm always happy to talk shop.
